@@ -35,19 +35,14 @@
 <script setup lang="ts">
 const todosStore = useTodosStore();
 const todos = ref(todosStore.todos);
-const props = defineProps({
-  todo: {
-    type: Object,
-    required: true,
-  },
-  key: {
-    type: String,
-    required: true,
-  },
-  infoModal: {
-    type: Boolean,
-    required: false,
-  }
-});
-const { todo } = props;
+
+interface Props {
+  todo: Object,
+  key: String,
+  infoModal: Boolean,
+}
+
+const props = defineProps<Props>();
+
+const { todo } = toRefs(props);
 </script>

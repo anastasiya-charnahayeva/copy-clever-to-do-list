@@ -12,7 +12,7 @@
 <script setup lang="ts">
 const todosStore = useTodosStore();
 const todos = ref(todosStore.todos);
-const filteredTodos = ref<any>(todos.value);
+const filteredTodos = ref(todos.value);
 const showModal = ref<Boolean>(false);
 const modalData = ref<Object>({
   name: "",
@@ -20,14 +20,13 @@ const modalData = ref<Object>({
   done: false,
   date: new Date()
 });
-const props = defineProps({
-  today: {
-    type: Boolean,
-    required: true,
-  },
 
-});
-const { today } = props;
+interface Props {  
+  today: Boolean
+}
+
+const props = defineProps<Props>();
+const { today } = toRefs(props);
 
 const changeStatus = async (e: boolean, id: string) => {  
   await todosStore.changeStatus(e, id);

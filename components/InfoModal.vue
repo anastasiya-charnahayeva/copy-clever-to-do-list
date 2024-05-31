@@ -31,26 +31,18 @@
 
 <script setup lang="ts">
 const emit = defineEmits<{
-  (event: 'close'): void;
+  close: []
 }>();
 const todosStore = useTodosStore();
 const todos = ref(todosStore.todos);
-const props = defineProps({
-  showDateTitle: {
-    type: String,
-    required: true,
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-  showInfoModal: {
-    type: Boolean,
-    required: true,
-  }
-});
-const { date, showInfoModal } = props;
-const filteredTodos = ref<any>(todos);
+interface Props {
+  showDateTitle: String,
+  date: Date,
+  showInfoModal: Boolean,
+}
+const props = defineProps<Props>();
+const { date, showInfoModal } = toRefs(props);
+const filteredTodos = ref(todos);
 const changeStatus = async (e: boolean, id: string) => {
   await todosStore.changeStatus(e, id);
   updateFilteredTodos();

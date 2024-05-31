@@ -69,19 +69,16 @@
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 const emit = defineEmits<{
-  (event: 'saveData', payload: any): void;
+  saveData: [payload: any]
 }>();
-const props = defineProps({
-  showModal: {
-    type: Boolean,
-    required: true,
-  },
-  data: {
-    type: Object,
-    required: false,
-  }
-});
-const { showModal, data } = props;
+
+interface Props {
+    showModal: Boolean,
+    data:Object
+}
+
+const props = defineProps<Props>();
+const { showModal, data } = toRefs(props);
 const name = ref<string>();
 const description = ref<string>();
 const date = ref<any>();

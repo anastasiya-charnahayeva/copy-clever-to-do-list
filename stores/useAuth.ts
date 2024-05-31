@@ -1,8 +1,8 @@
 
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, signInWithEmailAndPassword, signOut, type User } from 'firebase/auth'
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<object>()
+  const user = ref<User>()
 
   async function createUser(values: {email: string, password: string}) {
     const auth = getAuth();

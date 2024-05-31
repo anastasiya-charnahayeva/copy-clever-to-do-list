@@ -8,17 +8,15 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  // we deactivate the Server Side Rendering
-  ssr: false,
+  ssr: true,
 
-  // Add nuxt-vuefire module
   modules: [
     'nuxt-vuefire',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
   ],
   vuefire: {
-    auth: true, // enable Firebase Authentication
+    auth: true,
     config: {
       apiKey: process.env.apikey,
       authDomain: process.env.authDomain,

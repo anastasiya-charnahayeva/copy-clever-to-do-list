@@ -6,7 +6,7 @@
                     <h1 class="text-xl font-bold  md:text-2xl py-2 mb-2">
                         Sign in to your account
                     </h1>
-                    <div v-if="show_alert" class="text-white text-center font-bold p-4 mb-4 rounded-lg" :class="alert_variant">
+                    <div v-if="showAlert" class="text-white text-center font-bold p-4 mb-4 rounded-lg" :class="alert_variant">
                         {{ alert_msg }}
                     </div>
                     <form class="space-y-6" @submit.prevent="login">
@@ -45,7 +45,7 @@ const form = reactive({
     password: '',
 });
 
-const show_alert = ref<boolean>(false);
+const showAlert = ref<boolean>(false);
 const alert_variant = ref<string>('bg-blue-500');
 const alert_msg = ref<string>('Please wait! We are logging you in');
 
@@ -56,14 +56,14 @@ async function login() {
 definePageMeta({
   middleware: ['auth'],
 })
-    show_alert.value = true;
+    showAlert.value = true;
     alert_variant.value = 'bg-blue-500';
     alert_msg.value = 'Please wait! We are logging you in.';
 
     try {
         await auth.signInUser(form);
     } catch (error) {
-        show_alert.value = true;
+        showAlert.value = true;
         alert_variant.value = 'bg-red-500';
         alert_msg.value = 'Invalid login details.';
         return;

@@ -1,7 +1,5 @@
 <template>
-    <div>
-        <TodoList :today="false"/>
-    </div>
+    <TodoList :today="false"/>
 </template>
 
 <script setup lang="ts">
