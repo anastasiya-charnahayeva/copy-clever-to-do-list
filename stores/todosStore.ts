@@ -1,11 +1,14 @@
 import { addDoc, collection, doc, getFirestore, updateDoc, where, deleteDoc } from "firebase/firestore";
+import {useAuthStore} from './useAuth'
+
 
 export const useTodosStore = defineStore('todos', () => {  
   const { $firebaseApp } = useNuxtApp();
   const db = getFirestore($firebaseApp);
+  const authStore = useAuthStore();
   const todosRef = collection(db, "todos");
   const res = useCollection(todosRef, {
-    where: ['userId', '==', localStorage.getItem('uid')],
+    where: ['userId', '==', authStore.user.id],
   });
   const todos = ref(res.data);
 
@@ -18,7 +21,8 @@ export const useTodosStore = defineStore('todos', () => {
   }
 
   const saveData = async (data) => {
-    const userId = localStorage.getItem('uid');
+    const userId = authStore.user.id;
+
     const newObj = {
       done: data?.done ? true : false,
       name: data.name || "",

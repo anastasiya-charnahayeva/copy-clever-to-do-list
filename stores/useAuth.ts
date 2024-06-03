@@ -14,18 +14,13 @@ export const useAuthStore = defineStore('auth', () => {
     const auth = getAuth();
     const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
     user.value = userCredential.user;
-    
-    localStorage.setItem("access_token", userCredential.user?.accessToken);
-    localStorage.setItem("uid", userCredential.user?.uid);
-
+    console.log(user.value)
   }
 
   async function signOutUser() {
     const auth = getAuth();
     await signOut(auth);
     user.value = null;
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("uid");
   }
 
   return {

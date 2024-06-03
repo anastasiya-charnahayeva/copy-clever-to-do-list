@@ -6,8 +6,8 @@
                     <h1 class="text-xl font-bold  md:text-2xl py-2 mb-2">
                         Sign in to your account
                     </h1>
-                    <div v-if="showAlert" class="text-white text-center font-bold p-4 mb-4 rounded-lg" :class="alert_variant">
-                        {{ alert_msg }}
+                    <div v-if="showAlert" class="text-white text-center font-bold p-4 mb-4 rounded-lg" :class="alertVariant">
+                        {{ alertMsg }}
                     </div>
                     <form class="space-y-6" @submit.prevent="login">
                         <div>
@@ -46,8 +46,8 @@ const form = reactive({
 });
 
 const showAlert = ref<boolean>(false);
-const alert_variant = ref<string>('bg-blue-500');
-const alert_msg = ref<string>('Please wait! We are logging you in');
+const alertVariant = ref<string>('bg-blue-500');
+const alertMsg = ref<string>('Please wait! We are logging you in');
 
 const auth = useAuthStore();
 const router = useRouter();
@@ -57,19 +57,19 @@ definePageMeta({
   middleware: ['auth'],
 })
     showAlert.value = true;
-    alert_variant.value = 'bg-blue-500';
-    alert_msg.value = 'Please wait! We are logging you in.';
+    alertVariant.value = 'bg-blue-500';
+    alertMsg.value = 'Please wait! We are logging you in.';
 
     try {
         await auth.signInUser(form);
     } catch (error) {
         showAlert.value = true;
-        alert_variant.value = 'bg-red-500';
-        alert_msg.value = 'Invalid login details.';
+        alertVariant.value = 'bg-red-500';
+        alertMsg.value = 'Invalid login details.';
         return;
     }
-    alert_variant.value = 'bg-green-500';
-    alert_msg.value = 'Success! You are now logged in.';
+    alertVariant.value = 'bg-green-500';
+    alertMsg.value = 'Success! You are now logged in.';
     router.push({ path: "/todos" });
 }
 
