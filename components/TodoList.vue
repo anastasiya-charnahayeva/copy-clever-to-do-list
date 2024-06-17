@@ -10,9 +10,20 @@
 </template>
 
 <script setup lang="ts">
+
+import { useTodosApi } from '~/composables/api/useTodosApi';
+import {useAuthStore} from '@/stores/useAuth'
+import { useTodosStore }  from '@/stores/todosStore'
+
+const auth = useAuthStore();
+const authStore = auth;
+const { getAllTodos, saveData: saveTodoData, remove: removeTodo, updateTodo: update } = useTodosApi();
+
+const { data } = await getAllTodos();
+
 const todosStore = useTodosStore();
-const todos = ref(todosStore.todos);
-const filteredTodos = ref<any>(todos.value);
+const todos = ref(data.value);
+const filteredTodos = ref(todos.value);
 const showModal = ref<Boolean>(false);
 const modalData = ref<Object>({
   name: "",
@@ -20,17 +31,16 @@ const modalData = ref<Object>({
   done: false,
   date: new Date()
 });
-const props = defineProps({
-  today: {
-    type: Boolean,
-    required: true,
-  },
 
-});
-const { today } = props;
+interface Props {  
+  today: Boolean
+}
 
-const changeStatus = async (e: boolean, id: string) => {  
-  await todosStore.changeStatus(e, id);
+const props = defineProps<Props>();
+const { today } = toRefs(props);
+
+const changeStatus = async (e: boolean, id: string) => {
+  await update({ id: id, done: e });
   updateFilteredTodos();
 }
 
@@ -40,13 +50,26 @@ const edit = (e: any, id: string) => {
 }
 
 const remove = async (e: any, id: string) => {  
-  await todosStore.remove(e, id);
+  await removeTodo({ id: id });
   updateFilteredTodos();
 }
 
 const saveData = async (data: any) => {
   showModal.value = false;
-  await todosStore.saveData(data);
+    const userId = authStore.user.id;
+
+    const newObj = {
+      done: data?.done ? true : false,
+      name: data.name || "",
+      description: data.description || "",
+      date: data.date || new Date(),
+      userId
+    }
+    if (data?.id) {
+      await update({ id: data.id, data: newObj });
+    } else {
+      await saveTodoData(newObj);
+    }
   modalData.value = {};
   updateFilteredTodos();
 }
@@ -54,7 +77,7 @@ const saveData = async (data: any) => {
 const updateFilteredTodos = () => {
     if (today) {
       const startDate = new Date();
-      filteredTodos.value = todos.value.filter((todo) => {
+      filteredTodos.value = todos.value?.filter((todo) => {
         const todoDate = new Date(todo.date.seconds*1000);
         if ( todoDate.getFullYear() == startDate.getFullYear() &&
          todoDate.getMonth() == startDate.getMonth() &&

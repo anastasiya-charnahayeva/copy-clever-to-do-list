@@ -1,7 +1,5 @@
 <template>
-    <div>
-        <TodoList :today="true"/>
-    </div>
+    <TodoList :today="true"/>
 </template>
 <script setup lang="ts">
     definePageMeta({

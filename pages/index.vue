@@ -1,9 +1,7 @@
 <template>
-    <div>
-        <div>Welcome!</div>
-        <div>Email: {{ auth.user.email }}</div>
-        <div>Uid: {{ auth.user.uid }}</div>
-    </div>
+    <div>Welcome!</div>
+    <div>Email: {{ auth.user.email }}</div>
+    <div>Uid: {{ auth.user.uid }}</div>
 </template>
 
 <script setup lang="ts">

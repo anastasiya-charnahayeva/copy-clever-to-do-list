@@ -6,9 +6,9 @@
                     <h1 class="text-xl font-bold  md:text-2xl py-2 mb-2">
                         Create account
                     </h1>
-                    <div v-if="show_alert" class="text-white text-center font-bold p-4 mb-4 rounded-lg"
-                        :class="alert_variant">
-                        {{ alert_msg }}
+                    <div v-if="showAlert" class="text-white text-center font-bold p-4 mb-4 rounded-lg"
+                        :class="alertVariant">
+                        {{ alertMsg }}
                     </div>
                     <form class="space-y-6" @submit.prevent="register">
                         <div>
@@ -57,28 +57,28 @@ const form = reactive({
     password: '',
 });
 
-const show_alert = ref<boolean>(false);
-const alert_variant = ref<string>('bg-blue-500');
-const alert_msg = ref<string>('Please wait! Your account is being created.');
+const showAlert = ref<boolean>(false);
+const alertVariant = ref<string>('bg-blue-500');
+const alertMsg = ref<string>('Please wait! Your account is being created.');
 
 const auth = useAuthStore();
 const router = useRouter();
 
 async function register() {
-    show_alert.value = true;
-    alert_variant.value = 'bg-blue-500';
-    alert_msg.value = 'Please wait! Your account is being created.';
+    showAlert.value = true;
+    alertVariant.value = 'bg-blue-500';
+    alertMsg.value = 'Please wait! Your account is being created.';
 
     try {
         await auth.createUser(form);
     } catch (error) {
-        show_alert.value = true;
-        alert_variant.value = 'bg-red-500';
-        alert_msg.value = 'An unexpected error occurred. Please try again later.';
+        showAlert.value = true;
+        alertVariant.value = 'bg-red-500';
+        alertMsg.value = 'An unexpected error occurred. Please try again later.';
         return
     }
-    alert_variant.value = 'bg-green-500';
-    alert_msg.value = 'Success! Your account is created.';
+    alertVariant.value = 'bg-green-500';
+    alertMsg.value = 'Success! Your account is created.';
     router.push({ path: "/todos" });
 }
 

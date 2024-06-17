@@ -7,12 +7,10 @@
     </div>
 </template>
 <script setup lang="ts">
-const props = defineProps({
-  showModal: {
-    type: Boolean,
-    required: true,
-  },
-});
-let { showModal } = props;
+interface Props {
+    showModal: Boolean
+}
+const props = defineProps<Props>();
+let { showModal } = toRefs(props);
 
 </script>

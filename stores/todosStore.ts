@@ -1,24 +1,29 @@
-import { addDoc, collection, doc, getFirestore, updateDoc, where, deleteDoc } from "firebase/firestore";
 
-export const useTodosStore = defineStore('todos', () => {  
-  const { $firebaseApp } = useNuxtApp();
-  const db = getFirestore($firebaseApp);
-  const todosRef = collection(db, "todos");
-  const res = useCollection(todosRef, {
-    where: ['userId', '==', localStorage.getItem('uid')],
-  });
-  const todos = ref(res.data);
+import {useAuthStore} from '@/stores/useAuth';
+import { useTodosApi } from '~/composables/api/useTodosApi';
+
+
+export const useTodosStore = defineStore('todos', async() => {
+  const todos = ref([]);
+
+  const auth = useAuthStore();
+  const authStore = auth;
+  const { getAllTodos } = useTodosApi();
+  const { data } = await getAllTodos();
+  todos.value = data.value;
+
 
   const changeStatus = async (e: boolean, id: string) => {
-    await updateDoc(doc(db, "todos", id), {done: e}, {merge: true});
+     await useFetch('/api/updateTodo',{ id: id, done: e } );
   }
 
   const remove = async (e: any, id: string) => {
-    await deleteDoc(doc(db, "todos", id));
+     await useFetch('/api/removeTodo',{ id: id });
   }
 
   const saveData = async (data) => {
-    const userId = localStorage.getItem('uid');
+    const userId = authStore.user.id;
+
     const newObj = {
       done: data?.done ? true : false,
       name: data.name || "",
@@ -27,9 +32,9 @@ export const useTodosStore = defineStore('todos', () => {
       userId
     }
     if (data?.id) {
-      await updateDoc(doc(db, "todos", data?.id), data, {merge: true});
+       await useFetch('/api/updateTodo', { id: data.id, data: newObj });
     } else {
-      await addDoc(collection(db, "todos"), newObj);
+       await useFetch('/api/addTodo', newObj);
     }
   }
 
@@ -39,6 +44,4 @@ export const useTodosStore = defineStore('todos', () => {
     remove,
     saveData,
   }
-}, {
-  persist: true,
 })
