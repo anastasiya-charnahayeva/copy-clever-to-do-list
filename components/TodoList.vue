@@ -13,11 +13,12 @@
 
 import { useTodosApi } from '~/composables/api/useTodosApi';
 import {useAuthStore} from '@/stores/useAuth'
-import {useTodosStore} from '@/stores/todosStore'
+import { useTodosStore }  from '@/stores/todosStore'
 
 const auth = useAuthStore();
 const authStore = auth;
-const { getAllTodos } = useTodosApi();
+const { getAllTodos, saveData: saveTodoData, remove: removeTodo, updateTodo: update } = useTodosApi();
+
 const { data } = await getAllTodos();
 
 const todosStore = useTodosStore();
@@ -38,8 +39,8 @@ interface Props {
 const props = defineProps<Props>();
 const { today } = toRefs(props);
 
-const changeStatus = async (e: boolean, id: string) => {  
-  await todosStore.changeStatus(e, id);
+const changeStatus = async (e: boolean, id: string) => {
+  await update({ id: id, done: e });
   updateFilteredTodos();
 }
 
@@ -49,13 +50,26 @@ const edit = (e: any, id: string) => {
 }
 
 const remove = async (e: any, id: string) => {  
-  await todosStore.remove(e, id);
+  await removeTodo({ id: id });
   updateFilteredTodos();
 }
 
 const saveData = async (data: any) => {
   showModal.value = false;
-  await todosStore.saveData(data);
+    const userId = authStore.user.id;
+
+    const newObj = {
+      done: data?.done ? true : false,
+      name: data.name || "",
+      description: data.description || "",
+      date: data.date || new Date(),
+      userId
+    }
+    if (data?.id) {
+      await update({ id: data.id, data: newObj });
+    } else {
+      await saveTodoData(newObj);
+    }
   modalData.value = {};
   updateFilteredTodos();
 }

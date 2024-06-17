@@ -1,6 +1,7 @@
 import { firestore } from '../utils/firebase';
 
-export default defineEventHandler(async (event: any, id: string) => {
-    const doc = await firestore.collection("todos").doc(id).delete();
+export default defineEventHandler(async (body: any) => {
+    const ref = firestore.collection(`todos`);
+    const doc = await ref.doc(body.id).delete();
     return doc;
 })
