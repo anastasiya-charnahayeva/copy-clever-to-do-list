@@ -14,7 +14,6 @@ export const useAuthStore = defineStore('auth', () => {
     const auth = getAuth();
     const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
     user.value = userCredential.user;
-    console.log(user.value)
   }
 
   async function signOutUser() {

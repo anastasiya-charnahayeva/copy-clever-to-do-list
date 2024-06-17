@@ -11,13 +11,11 @@ export const useTodosStore = defineStore('todos', async() => {
 
   
 
-  const auth = JSON.stringify(useAuthStore());
-  const authStore = JSON.parse(auth);
+  const auth = useAuthStore();
+  const authStore = auth;
   const { getAllTodos } = useTodosApi();
-  console.log('auth', authStore);
   const { data } = await getAllTodos();
   todos.value = data.value;
-  console.log('todos store', JSON.parse(todos.value));
 
 
   const changeStatus = async (e: boolean, id: string) => {

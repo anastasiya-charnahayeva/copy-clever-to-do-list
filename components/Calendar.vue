@@ -35,7 +35,7 @@
             </ul>
           </div>
           <div class="mb-2">
-            <span v-if="getEventByDate(day).length>maxContainIndex" class="p-2 mb-2 text-xs bg-orange-200  rounded-lg">Click for More</span>
+            <span v-if="getEventByDate(day)?.length>maxContainIndex" class="p-2 mb-2 text-xs bg-orange-200  rounded-lg">Click for More</span>
           </div>
       </td>
         </tr>
@@ -154,8 +154,8 @@ const showDate = computed(() => {
 
 const getEventByDate = (day: any) => {
       let res = [];
-      const startDate = new Date(currentYear.value, currentMonth.value, day.date)
-      res = todos.value.filter((todo) => {
+      const startDate = day.date ? new Date(currentYear.value, currentMonth.value, day.date) : new Date();
+      res = todos.value?.filter((todo) => {
         const todoDate = new Date(todo.date.seconds*1000);
         if ( todoDate.getFullYear() == startDate.getFullYear() &&
          todoDate.getMonth() == startDate.getMonth() &&

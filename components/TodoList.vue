@@ -15,18 +15,14 @@ import { useTodosApi } from '~/composables/api/useTodosApi';
 import {useAuthStore} from '@/stores/useAuth'
 import {useTodosStore} from '@/stores/todosStore'
 
-const auth = JSON.stringify(useAuthStore());
-const authStore = JSON.parse(auth);
+const auth = useAuthStore();
+const authStore = auth;
 const { getAllTodos } = useTodosApi();
-console.log('auth-component', authStore);
 const { data } = await getAllTodos();
-console.log('data-component', JSON.stringify(data.value));
 
 const todosStore = useTodosStore();
-console.log('store', todosStore);
-const todos = ref(JSON.stringify(data.value));
-console.log('todos', todos.value)
-const filteredTodos = ref(JSON.stringify(todos.value));
+const todos = ref(data.value);
+const filteredTodos = ref(todos.value);
 const showModal = ref<Boolean>(false);
 const modalData = ref<Object>({
   name: "",
@@ -67,7 +63,7 @@ const saveData = async (data: any) => {
 const updateFilteredTodos = () => {
     if (today) {
       const startDate = new Date();
-      filteredTodos.value = todos.value.filter((todo) => {
+      filteredTodos.value = todos.value?.filter((todo) => {
         const todoDate = new Date(todo.date.seconds*1000);
         if ( todoDate.getFullYear() == startDate.getFullYear() &&
          todoDate.getMonth() == startDate.getMonth() &&

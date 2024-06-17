@@ -60,7 +60,7 @@ const remove = async (e: any, id: string) => {
 
 const updateFilteredTodos = () => {
    const startDate = new Date(date);
-      filteredTodos.value = todos.value.filter((todo) => {
+      filteredTodos.value = todos.value?.filter((todo) => {
         const todoDate = new Date(todo.date.seconds*1000);
         if (todoDate.getFullYear() == startDate.getFullYear() &&
          todoDate.getMonth() == startDate.getMonth() &&
