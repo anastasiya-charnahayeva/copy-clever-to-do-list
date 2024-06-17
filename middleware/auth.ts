@@ -1,7 +1,6 @@
-
 import {useAuthStore} from '@/stores/useAuth'
 export default defineNuxtRouteMiddleware((to) => {
-    const authStore = useAuthStore()
+    const authStore = useAuthStore();
     const allowedRoutes = ['/register', '/login']
 
     if (allowedRoutes.includes(to.path)
